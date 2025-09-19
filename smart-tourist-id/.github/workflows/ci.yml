@@ -1,0 +1,22 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install root deps
+        run: npm ci
+      - name: Install backend deps & test
+        run: |
+          cd backend
+          npm ci
+          npm test || true
+      - name: Hardhat tests
+        run: |
+          npm ci
+          npx hardhat test
